@@ -1,3 +1,4 @@
+import ProfileCard from "../ProfileCard/ProfileCard";
 import "./ProfileList.scss";
 
 type ProfileListProps = {
@@ -7,16 +8,17 @@ type ProfileListProps = {
 const ProfileList = ({ profiles }: ProfileListProps) => {
   return (
     <>
-      <div>
+      <div className="profiles">
         {profiles.map((profile) => (
-          <>
-          <h2>{profile.name}</h2>
-          <p>{profile.birthday}</p>
-          <p>{profile.numOfSiblings}</p>
-          <p>{profile.occupation}</p>
-          <p>{profile.heritage}</p>
-          <p>{profile.lastSeen}</p>
-          </>
+          <ProfileCard 
+            key={profile.id}
+            name={profile.name}
+            birthday={profile.birthday}
+            numOfSiblings={profile.numOfSiblings}
+            occupation={profile.occupation}
+            heritage={profile.heritage}
+            lastSeen={profile.lastSeen}
+          />
         ))}
       </div>
     </>

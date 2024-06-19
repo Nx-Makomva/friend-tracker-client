@@ -19,7 +19,8 @@ const ViewProfiles = () => {
   },[]);
 
   return (
-    <div>
+    <div className="profile-list">
+      <h1></h1>
       <ProfileList profiles={profiles} />
     </div>
   )
