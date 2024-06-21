@@ -1,18 +1,34 @@
 import "./ProfileCard.scss";
+import { useNavigate } from "react-router-dom";
+
+// type ProfileCardProps = {
+//   id: string;
+//   name: string;
+//   birthday: string;
+//   numOfSiblings: string;
+//   occupation: string;
+//   heritage: string;
+//   lastSeen: string;
+// }
 
 type ProfileCardProps = {
-  name: string;
-  birthday: string;
-  numOfSiblings: string;
-  occupation: string;
-  heritage: string;
-  lastSeen: string;
+  profile: Profile
 }
 
-const ProfileCard = ({name, birthday, numOfSiblings, occupation, heritage, lastSeen}: ProfileCardProps) => {
+const ProfileCard = ({profile: profileObject}: ProfileCardProps) => {
+  const { id, name, birthday, numOfSiblings, occupation, heritage, lastSeen } = profileObject;
+  const navigate = useNavigate();
 
-  const birthdayDate = new Date(birthday);
-  const lastSeenDate = new Date(lastSeen);
+  // const birthdayDate = new Date(birthday);
+  // const lastSeenDate = new Date(lastSeen);
+
+  const handleAllergyClick = () => {
+    navigate(`/profile/${id}/allergies`)
+  }
+
+  const handleEditClick = () => {
+    navigate(`/profile/${id}`)
+  }
 
   return (
     <div>
@@ -22,7 +38,8 @@ const ProfileCard = ({name, birthday, numOfSiblings, occupation, heritage, lastS
       <p>Profession: {occupation}</p>
       <p>Heritage: {heritage}</p>
       <p>Last Hangout: {lastSeen}</p>
-      <button>Allergies</button> <button>Edit</button>
+      <button onClick={handleAllergyClick}>Allergies</button> <button onClick={handleEditClick}>Edit</button>
+
     </div>
   )
 }
