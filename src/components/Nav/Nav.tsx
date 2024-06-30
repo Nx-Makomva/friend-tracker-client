@@ -1,13 +1,25 @@
+import { useState, FormEvent, useEffect } from "react";
+import SearchBox from "../SearchBox/SearchBox";
 import "./Nav.scss";
 import { Link } from "react-router-dom";
 
-const Nav = () => {
+type NavProps = {
+  handleSearchInput: (event: FormEvent<HTMLInputElement>) => void;
+  searchTerm: string;
+};
+
+const Nav = ({handleSearchInput, searchTerm}: NavProps) => {
+  
   return (
     <div className='nav'>
       <Link to="/">
       <p>Home</p>
       </Link>
-      <p>Menu Icon to house menu items</p>
+      <SearchBox 
+        label="Search Name, Heritage or Profession"
+        searchTerm={searchTerm}
+        onInput={handleSearchInput}
+      />
     </div>
   )
 }
