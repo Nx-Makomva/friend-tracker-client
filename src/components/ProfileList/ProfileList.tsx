@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import ProfileCard from "../ProfileCard/ProfileCard";
 import "./ProfileList.scss";
 
@@ -8,10 +8,25 @@ type ProfileListProps = {
 
 const ProfileList = ({ searchBoxFilter }: ProfileListProps) => {
   const [selectedOption, setSelectedOption] = useState("");
-  const [birthdayStartDate, setBirthdayStartDate] = useState("");
-  const [birthdayEndDate, setBirthdayEndDate] = useState("");
-  const [lastSeenStartDate, setLastSeenStartDate] = useState("");
-  const [lastSeenEndDate, setLastSeenEndDate] = useState("");
+
+  const sortedByBirthday = searchBoxFilter.slice().sort((a, b) => new Date(a.birthday).getTime() - new Date(b.birthday).getTime());
+  const sortedByLastSeen = searchBoxFilter.slice().sort((a, b) => new Date(a.lastSeen).getTime() - new Date(b.lastSeen).getTime());
+  const profilesToDisplay = selectedOption === 'lastSeen' ? sortedByLastSeen : selectedOption === 'birthday' ? sortedByBirthday : searchBoxFilter;
+  const birthdayRadioRef = useRef<HTMLInputElement>(null);
+  const lastSeenRadioRef = useRef<HTMLInputElement>(null);
+
+  const reset = useCallback(() => {
+    setSelectedOption("");
+    if (birthdayRadioRef.current) {
+      birthdayRadioRef.current.checked = false;
+    }
+
+    if (lastSeenRadioRef.current) {
+      lastSeenRadioRef.current.checked = false;
+    }
+  }, []);
+
+
 
   return (
     <>
@@ -21,6 +36,7 @@ const ProfileList = ({ searchBoxFilter }: ProfileListProps) => {
           id="birthday"
           name="dateOption"
           value="birthday"
+          ref={birthdayRadioRef}
           checked={selectedOption === "birthday"}
           onChange={(e) => setSelectedOption(e.target.value)}
         />
@@ -31,47 +47,15 @@ const ProfileList = ({ searchBoxFilter }: ProfileListProps) => {
           id="lastSeen"
           name="dateOption"
           value="lastSeen"
+          ref={lastSeenRadioRef}
           checked={selectedOption === "lastSeen"}
           onChange={(e) => setSelectedOption(e.target.value)}
         />
         <label htmlFor="lastSeen">Last Seen</label>
-
-        {selectedOption === "birthday" && (
-          <>
-            <input
-              type="date"
-              id="birthdayDatePickerStart"
-              name="birthdayDateStart"
-            />
-            <label htmlFor="birthdayDatePickerStart">Start Date</label>
-            <input
-              type="date"
-              id="birthdayDatePickerEnd"
-              name="birthdayDateEnd"
-            />
-            <label htmlFor="birthdayDatePickerEnd">End Date</label>
-          </>
-        )}
-
-        {selectedOption === "lastSeen" && (
-          <>
-            <input
-              type="date"
-              id="lastSeenDatePickerStart"
-              name="lastSeenDateStart"
-            />
-            <label htmlFor="lastSeenDatePickerStart">Start Date</label>
-            <input
-              type="date"
-              id="lastSeenDatePickerEnd"
-              name="lastSeenDateEnd"
-            />
-            <label htmlFor="lastSeenDatePickerEnd">End Date</label>
-          </>
-        )}
       </form>
+      <button onClick={reset}>Clear</button>
       <div className="profiles">
-        {searchBoxFilter.map((profile) => (
+        { profilesToDisplay.map((profile) => (
           <ProfileCard key={profile.id} profile={profile} />
         ))}
       </div>

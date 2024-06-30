@@ -43,7 +43,7 @@ function App() {
 
   }, [searchTerm])
 
-  
+
 
   
 
@@ -54,7 +54,7 @@ function App() {
         searchTerm={searchTerm}
       />
       <Routes>
-        <Route path="/" element={<ViewProfiles searchBoxFilter={searchBoxFilter} />} />
+        <Route path="/" element={<ViewProfiles searchBoxFilter={searchTerm ? searchBoxFilter : profiles} />} />
         <Route path="/profile/:id/allergies" element={<ViewProfileAllergies />} />
         <Route path="profile/:id" element={<EditProfile />} />
       </Routes>
